@@ -1,8 +1,6 @@
 package main
 
 import (
-	"fmt"
-
 	"github.com/CarlosBarbosaFilho/api-manager-projects/config"
 	"github.com/CarlosBarbosaFilho/api-manager-projects/router"
 )
@@ -12,7 +10,6 @@ var (
 )
 
 func main() {
-	fmt.Println("Initializer Application !")
 
 	// Initializer logger
 	logger = config.GetLogger(">>>>> main <<<<<")

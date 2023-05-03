@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/CarlosBarbosaFilho/api-manager-projects/helper"
+	"github.com/CarlosBarbosaFilho/api-manager-projects/model"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -17,24 +18,21 @@ const (
 )
 
 var (
-	dbs    *gorm.DB
 	logger *Logger
 )
 
 func databaseConnection() *gorm.DB {
 	sqlInfo := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable", host, port, user, password, dbname)
 	dbs, err := gorm.Open(postgres.Open(sqlInfo), &gorm.Config{})
-	helper.ErrorPanic(err)
+	helper.ErrorDefault(err)
 
 	return dbs
 }
 
-func Init() *gorm.DB {
+func Init() {
 	db := databaseConnection()
-	return db
-}
-
-func GetLogger(prefix string) *Logger {
-	logger = NewLogger(prefix)
-	return logger
+	err := db.AutoMigrate(&model.Project{})
+	if err != nil {
+		logger.Errorf("Error to create table %v", err)
+	}
 }
